@@ -1,0 +1,14 @@
+import { generateKeypair, signMessage } from "../utils/crypto.js";
+
+export default class APZWallet {
+    constructor() {
+        const { privateKey, publicKey, address } = generateKeypair();
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+        this.address = address;
+    }
+
+    sign(data) {
+        return signMessage(this.privateKey, data);
+    }
+}
