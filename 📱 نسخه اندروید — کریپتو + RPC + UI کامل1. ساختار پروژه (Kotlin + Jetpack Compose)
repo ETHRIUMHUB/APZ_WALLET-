@@ -1,0 +1,9 @@
+apz-wallet-android/
+├── app/
+│   ├── src/main/java/org/apz/wallet/
+│   │   ├── MainActivity.kt
+│   │   ├── crypto/APZCrypto.kt
+│   │   ├── network/APZProvider.kt
+│   │   └── ui/WalletScreen.kt
+│   └── src/main/AndroidManifest.xml
+└── build.gradle / settings.gradle
