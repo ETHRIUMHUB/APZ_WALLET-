@@ -1,0 +1,43 @@
+package org.apz.wallet.crypto
+
+import java.security.SecureRandom
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+
+object APZCrypto {
+
+    data class Keypair(
+        val privateKey: ByteArray,
+        val publicKey: ByteArray,
+        val address: String
+    )
+
+    fun generateKeypair(): Keypair {
+        val random = SecureRandom()
+        val privateKey = ByteArray(32)
+        random.nextBytes(privateKey)
+
+        // اینجا می‌تونی به‌جای این، الگوریتم واقعی (مثلاً Ed25519) بذاری
+        val publicKey = sha256(privateKey)
+        val address = "apz_" + publicKey.joinToString("") { "%02x".format(it) }
+
+        return Keypair(
+            privateKey = privateKey,
+            publicKey = publicKey,
+            address = address
+        )
+    }
+
+    fun signMessage(privateKey: ByteArray, message: String): ByteArray {
+        // نمونه ساده HMAC-SHA256 (برای دمو؛ در نسخه نهایی الگوریتم امضای واقعی APZ را جایگزین کن)
+        val keySpec = SecretKeySpec(privateKey, "HmacSHA256")
+        val mac = Mac.getInstance("HmacSHA256")
+        mac.init(keySpec)
+        return mac.doFinal(message.toByteArray(Charsets.UTF_8))
+    }
+
+    private fun sha256(input: ByteArray): ByteArray {
+        val digest = java.security.MessageDigest.getInstance("SHA-256")
+        return digest.digest(input)
+    }
+}
