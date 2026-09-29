@@ -1,0 +1,105 @@
+📚 داکیومنت دو‌زبانه رسمی APZ WALLET🇮🇷 مستند رسمی APZ WALLET (نسخه فارسی)۱. معرفیAPZ WALLET یک کیف‌پول سبک، شفاف و متن‌باز برای APZ Chain است؛ طراحی‌شده برای استفاده روزمره، توسعه‌پذیری، و بررسی مستقل کد.
+این کیف‌پول بدون وابستگی به سرویس‌های بسته، با تمرکز بر امنیت، سادگی و قابلیت بازتولید ساخته شده است.۲. قابلیت‌هاایجاد کیف‌پول جدید (کلید خصوصی/عمومی + آدرس APZ)امضای تراکنش‌ها با کلید خصوصی کاربرارسال تراکنش خام به APZ RPCپشتیبانی چندزنجیره‌ای (Mainnet، Testnet، Devnet)رابط کاربری وب سبک (HTML/CSS/JS)ساختار ماژولار برای ادغام در پروژه‌های دیگر APZ۳. معماریcore/apz-provider.js → ارتباط با APZ RPCapz-wallet.js → مدیریت کیف‌پول و کلیدهاapz-transaction.js → ساخت و سریال‌سازی تراکنشui/index.html → رابط کاربریapp.js → منطق تعامل کاربرstyles.css → استایل و هویت بصری APZutils/crypto.js → تولید کلید و امضاformat.js → قالب‌بندی مقادیرnetwork.js → ابزارهای شبکهconfig/chains.json → تنظیمات شبکه‌ها (RPCها)۴. نصب و اجرا (وب)پیش‌نیاز: Node.js (برای نصب وابستگی‌ها)کپی کردنbashgit clone https://github.com/apz-chain/apz-wallet.git
+cd apz-wallet
+npm installبرای اجرای نسخه‌ی وب:فایل src/ui/index.html را در مرورگر باز کنید.یا یک وب‌سرور ساده اجرا کنید:کپی کردنbashcd src/ui
+python3 -m http.server 8080۵. امنیتکلید خصوصی فقط در دستگاه کاربر نگه‌داری می‌شود.هیچ داده‌ی حساس به سرورهای خارجی ارسال نمی‌شود.توصیه می‌شود برای نسخه‌ی عملیاتی، رمزنگاری سمت‌کاربر و ذخیره‌سازی امن (Secure Storage) فعال شود.۶. مشارکتریپو GitHub: https://github.com/apz-chain/apz-walletگزارش باگ، پیشنهاد ویژگی، و Pull Request با قالب شفاف و قابل‌چاپ انجام شود.هر تغییر باید با توضیح امنیتی و معماری همراه باشد.🇬🇧 APZ WALLET Official Documentation (English)1. OverviewAPZ WALLET is a lightweight, transparent, open‑source wallet for APZ Chain, designed for daily use, auditability, and easy integration.
+It is built with a focus on security, simplicity, and reproducibility.2. FeaturesCreate wallet (private/public key + APZ address)Sign transactions using the user’s private keySend raw transactions to APZ RPCMulti‑chain support (Mainnet, Testnet, Devnet)Lightweight web UI (HTML/CSS/JS)Modular architecture for reuse in other APZ projects3. Architecturecore/apz-provider.js → APZ RPC communicationapz-wallet.js → wallet and key managementapz-transaction.js → transaction building & serializationui/index.html → user interfaceapp.js → interaction logicstyles.css → APZ visual identityutils/crypto.js → key generation & signingformat.js → value formattingnetwork.js → network helpersconfig/chains.json → network configuration (RPC endpoints)4. Install & Run (Web)Prerequisite: Node.jsکپی کردنbashgit clone https://github.com/apz-chain/apz-wallet.git
+cd apz-wallet
+npm installTo run the web version:Open src/ui/index.html in a browser, orStart a simple web server:کپی کردنbashcd src/ui
+python3 -m http.server 80805. SecurityPrivate keys are stored only on the user’s device.No sensitive data is sent to external servers.For production use, enable client‑side encryption and secure storage.6. ContributionGitHub repo: https://github.com/apz-chain/apz-walletBug reports, feature requests, and PRs should follow a clear, printable template.Every change must include security and architecture notes.📱 نسخه موبایل APZ WALLET (Android APK)من نمی‌تونم خودم APK رو بیلد و روی دستگاهت نصب کنم، اما می‌تونم ساختار کامل پروژه‌ی اندروید رو برات بچینم تا به‌راحتی بیلد بشه و خروجی APK تولید کنی.۱. انتخاب تکنولوژیبرای استقلال و reproducibility، پیشنهاد من:Kotlin + Jetpack Compose (بدون وابستگی به سرویس‌های گوگل، فقط Android SDK)ساختار پروژه:کپی کردنapz-wallet-android/
+├── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── AndroidManifest.xml
+│   │   │   ├── java/org/apz/wallet/MainActivity.kt
+│   │   │   └── res/...
+│   └── build.gradle
+└── settings.gradle۲. فایل نمونه build.gradle (ماژول app)کپی کردنgradleplugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "org.apz.wallet"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "org.apz.wallet"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.5.3"
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core-ktx:1.13.1"
+    implementation "androidx.activity:activity-compose:1.9.0"
+    implementation "androidx.compose.ui:ui:1.6.7"
+    implementation "androidx.compose.material3:material3:1.2.1"
+}۳. فایل نمونه MainActivity.ktکپی کردنkotlinpackage org.apz.wallet
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.tooling.preview.Preview
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            APZWalletApp()
+        }
+    }
+}
+
+@Composable
+fun APZWalletApp() {
+    var address by remember { mutableStateOf<String?>(null) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("APZ Wallet") })
+        }
+    ) { padding ->
+        WalletScreen(
+            address = address,
+            onCreateWallet = { addr ->
+                address = addr
+            }
+        )
+    }
+}
+
+@Composable
+fun WalletScreen(
+    address: String?,
+    onCreateWallet: (String) -> Unit
+) {
+    // TODO: اتصال به لایه‌ی crypto و APZ Provider
+    // نمایش آدرس، فرم ارسال تراکنش، و وضعیت
+}
+
+@Preview
+@Composable
+fun PreviewAPZWallet() {
+    APZWalletApp()
+}۴. منطق کیف‌پول در اندرویدمی‌تونی همان منطق crypto.js و apz-provider.js را به Kotlin منتقل کنی:کلاس APZWallet برای تولید کلید و آدرسکلاس APZProvider برای تماس HTTP با APZ RPCاستفاده از OkHttp یا Ktor برای درخواست‌ها۵. بیلد APKدر Android Studio یا خط فرمان:کپی کردنbash./gradlew assembleReleaseخروجی:
+app/build/outputs/apk/release/app-release.apk
+که می‌تونی روی دستگاه اندروید 13 نصب کنی (با فعال‌کردن نصب از منابع ناشناس).  Kotlin برای تولید کلید، امضا، و ارسال تراکنش APZ رو برات بنویسم،یا یک UI کامل Compose با رنگ‌های آبی/بنفش APZ و صفحه‌ی خوش‌آمدگویی طراحی کنم.دوست داری اول کد کریپتو و RPC اندروید رو کامل کنیم، یا UI کیف‌پول موبایل رو؟ 💙
