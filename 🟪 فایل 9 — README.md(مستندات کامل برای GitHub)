@@ -1,0 +1,12 @@
+# APZ Wallet
+
+A lightweight, secure, open-source wallet for APZ Chain.
+
+## Features
+- Create wallet (private/public key)
+- Sign transactions
+- Send raw transactions to APZ RPC
+- Multi-chain support (Mainnet + Testnet)
+- Pure JavaScript, no dependencies on external wallets
+
+## Install
