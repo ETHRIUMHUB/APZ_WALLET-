@@ -1,0 +1,94 @@
+package org.apz.wallet.ui
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+import org.apz.wallet.crypto.APZCrypto
+import org.apz.wallet.network.APZProvider
+
+@Composable
+fun WalletScreen(
+    provider: APZProvider
+) {
+    val scope = rememberCoroutineScope()
+
+    var keypair by remember { mutableStateOf<APZCrypto.Keypair?>(null) }
+    var balance by remember { mutableStateOf<String?>(null) }
+    var toAddress by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf("") }
+    var txResult by remember { mutableStateOf<String?>(null) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("APZ Wallet", style = MaterialTheme.typography.titleLarge)
+
+        Button(onClick = {
+            keypair = APZCrypto.generateKeypair()
+        }) {
+            Text("Create Wallet")
+        }
+
+        keypair?.let { kp ->
+            Text("Address: ${kp.address}")
+
+            Button(onClick = {
+                scope.launch {
+                    val resp = provider.getBalance(kp.address)
+                    balance = resp.toString()
+                }
+            }) {
+                Text("Get Balance")
+            }
+
+            balance?.let {
+                Text("Balance: $it")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Send Transaction")
+            OutlinedTextField(
+                value = toAddress,
+                onValueChange = { toAddress = it },
+                label = { Text("Recipient Address") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = amount,
+                onValueChange = { amount = it },
+                label = { Text("Amount") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Button(onClick = {
+                scope.launch {
+                    val txJson = JSONObject().apply {
+                        put("from", kp.address)
+                        put("to", toAddress)
+                        put("amount", amount)
+                        put("nonce", System.currentTimeMillis())
+                    }.toString()
+
+                    val signature = APZCrypto.signMessage(kp.privateKey, txJson)
+                    val rawHex = signature.joinToString("") { "%02x".format(it) }
+
+                    val resp = provider.sendRawTransaction(rawHex)
+                    txResult = resp.toString()
+                }
+            }) {
+                Text("Send")
+            }
+
+            txResult?.let {
+                Text("Result: $it")
+            }
+        }
+    }
+}
