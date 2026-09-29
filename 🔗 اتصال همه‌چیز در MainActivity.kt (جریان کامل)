@@ -1,0 +1,44 @@
+setContent {
+    val provider = APZProvider("https://rpc.apz-chain.org")
+
+    var showSplash by remember { mutableStateOf(true) }
+    var showWelcome by remember { mutableStateOf(false) }
+    var showOnboarding by remember { mutableStateOf(false) }
+    var showCreateWallet by remember { mutableStateOf(false) }
+    var showWallet by remember { mutableStateOf(false) }
+    var showTx by remember { mutableStateOf(false) }
+
+    var keypair by remember { mutableStateOf<APZCrypto.Keypair?>(null) }
+
+    MaterialTheme {
+        Surface {
+            when {
+                showSplash -> SplashScreen {
+                    showSplash = false
+                    showWelcome = true
+                }
+
+                showWelcome -> WelcomeScreen {
+                    showWelcome = false
+                    showOnboarding = true
+                }
+
+                showOnboarding -> OnboardingScreen {
+                    showOnboarding = false
+                    showCreateWallet = true
+                }
+
+                showCreateWallet -> CreateWalletScreen { kp ->
+                    keypair = kp
+                    showCreateWallet = false
+                    showWallet = true
+                }
+
+                showWallet && keypair != null -> NeonTransactionScreen(
+                    keypair = keypair!!,
+                    provider = provider
+                )
+            }
+        }
+    }
+}
