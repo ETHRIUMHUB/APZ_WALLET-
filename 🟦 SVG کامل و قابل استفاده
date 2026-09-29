@@ -1,0 +1,66 @@
+<svg width="360" height="360" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+
+    <!-- پس‌زمینه نئونی -->
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#8BE9FD"/>
+      <stop offset="40%" stop-color="#6A2BEA"/>
+      <stop offset="100%" stop-color="#0A0F2C"/>
+    </radialGradient>
+
+    <!-- افکت Glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- گرادیان متن -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8BE9FD"/>
+      <stop offset="100%" stop-color="#6A2BEA"/>
+    </linearGradient>
+
+    <!-- گرادیان نماد زنجیره -->
+    <linearGradient id="chainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8BE9FD"/>
+      <stop offset="100%" stop-color="#6A2BEA"/>
+    </linearGradient>
+
+  </defs>
+
+  <!-- پس‌زمینه -->
+  <circle cx="180" cy="180" r="160" fill="url(#bg)" />
+
+  <!-- حلقه امنیت -->
+  <circle cx="180" cy="180" r="135"
+          fill="none"
+          stroke="url(#chainGrad)"
+          stroke-width="6"
+          filter="url(#glow)" />
+
+  <!-- نماد زنجیره (Chain Link) -->
+  <g transform="translate(110,110)" filter="url(#glow)">
+    <rect x="0" y="40" width="80" height="40" rx="20"
+          fill="url(#chainGrad)" />
+    <rect x="60" y="0" width="80" height="40" rx="20"
+          fill="url(#chainGrad)" />
+    <rect x="60" y="80" width="80" height="40" rx="20"
+          fill="url(#chainGrad)" />
+  </g>
+
+  <!-- متن APZ -->
+  <text x="50%" y="72%"
+        text-anchor="middle"
+        font-family="Segoe UI, Roboto, sans-serif"
+        font-size="72"
+        font-weight="700"
+        fill="url(#textGrad)"
+        filter="url(#glow)">
+    APZ
+  </text>
+
+</svg>
