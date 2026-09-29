@@ -1,0 +1,53 @@
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#8BE9FD"/>
+      <stop offset="40%" stop-color="#6A2BEA"/>
+      <stop offset="100%" stop-color="#0A0F2C"/>
+    </radialGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- پس‌زمینه -->
+  <circle cx="160" cy="160" r="140" fill="url(#bg)" />
+
+  <!-- حلقه نئونی با انیمیشن پالس -->
+  <circle cx="160" cy="160" r="120"
+          fill="none"
+          stroke="#8BE9FD"
+          stroke-width="4"
+          filter="url(#glow)">
+    <animate attributeName="r"
+             values="115;125;115"
+             dur="2s"
+             repeatCount="indefinite" />
+  </circle>
+
+  <!-- گروه لوگو با چرخش -->
+  <g>
+    <text x="50%" y="50%"
+          text-anchor="middle"
+          dominant-baseline="central"
+          font-family="Segoe UI, Roboto, sans-serif"
+          font-size="64"
+          font-weight="700"
+          fill="#FFFFFF"
+          filter="url(#glow)">
+      APZ
+    </text>
+
+    <animateTransform attributeName="transform"
+                      type="rotate"
+                      from="0 160 160"
+                      to="360 160 160"
+                      dur="6s"
+                      repeatCount="indefinite" />
+  </g>
+</svg>
