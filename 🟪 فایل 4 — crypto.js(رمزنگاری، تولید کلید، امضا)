@@ -1,0 +1,18 @@
+import * as nacl from "tweetnacl";
+import { encodeUTF8, decodeUTF8 } from "tweetnacl-util";
+
+export function generateKeypair() {
+    const keypair = nacl.sign.keyPair();
+    const address = "apz_" + Buffer.from(keypair.publicKey).toString("hex");
+
+    return {
+        privateKey: keypair.secretKey,
+        publicKey: keypair.publicKey,
+        address
+    };
+}
+
+export function signMessage(privateKey, message) {
+    const msg = decodeUTF8(message);
+    return nacl.sign(msg, privateKey);
+}
