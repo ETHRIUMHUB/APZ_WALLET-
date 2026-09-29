@@ -1,0 +1,8 @@
+{
+    "mainnet": {
+        "rpc": "https://rpc.apz-chain.org"
+    },
+    "testnet": {
+        "rpc": "https://testnet.apz-chain.org"
+    }
+}
