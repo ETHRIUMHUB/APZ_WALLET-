@@ -1,0 +1,20 @@
+apz-wallet/
+├── src/
+│   ├── core/
+│   │   ├── apz-provider.js
+│   │   ├── apz-wallet.js
+│   │   ├── apz-transaction.js
+│   │   └── apz-storage.js
+│   ├── ui/
+│   │   ├── index.html
+│   │   ├── styles.css
+│   │   └── app.js
+│   ├── utils/
+│   │   ├── crypto.js
+│   │   ├── format.js
+│   │   └── network.js
+│   └── config/
+│       └── chains.json
+├── package.json
+├── README.md
+└── .env.example
