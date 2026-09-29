@@ -1,0 +1,46 @@
+package org.apz.wallet.network
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+
+class APZProvider(
+    private val rpcUrl: String
+) {
+    private val client = OkHttpClient()
+
+    suspend fun rpc(method: String, params: List<Any> = emptyList()): JSONObject =
+        withContext(Dispatchers.IO) {
+            val json = JSONObject().apply {
+                put("jsonrpc", "2.0")
+                put("id", 1)
+                put("method", method)
+                put("params", params)
+            }
+
+            val body = json.toString()
+                .toRequestBody("application/json".toMediaType())
+
+            val request = Request.Builder()
+                .url(rpcUrl)
+                .post(body)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                val respBody = response.body?.string() ?: "{}"
+                return@use JSONObject(respBody)
+            }
+        }
+
+    suspend fun getBalance(address: String): JSONObject {
+        return rpc("apz_getBalance", listOf(address))
+    }
+
+    suspend fun sendRawTransaction(rawTxHex: String): JSONObject {
+        return rpc("apz_sendRawTransaction", listOf(rawTxHex))
+    }
+}
