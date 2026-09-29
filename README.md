@@ -35,3 +35,6 @@ APZ WALLET با هدف شفافیت، سرعت و قابلیت بازتولید 
 ---
 
 ## 🧩 Project Structure | ساختار پروژه
+❤️ Author | سازندهCreated with passion by Khalil Heyrani
+ساخته‌شده با عشق توسط خلیل حیرانیAPZ Chain — Future of Transparent Infrastructure
+APZ Chain — آینده‌ای شفاف و قابل‌اعتماد
