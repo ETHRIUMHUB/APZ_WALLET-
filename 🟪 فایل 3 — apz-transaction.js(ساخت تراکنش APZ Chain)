@@ -1,0 +1,19 @@
+export default class APZTransaction {
+    constructor({ from, to, amount, nonce }) {
+        this.from = from;
+        this.to = to;
+        this.amount = amount;
+        this.nonce = nonce;
+        this.timestamp = Date.now();
+    }
+
+    serialize() {
+        return JSON.stringify({
+            from: this.from,
+            to: this.to,
+            amount: this.amount,
+            nonce: this.nonce,
+            timestamp: this.timestamp
+        });
+    }
+}
