@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>APZ Wallet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <h1>APZ Wallet</h1>
+
+        <button id="createWallet">Create Wallet</button>
+
+        <div id="walletInfo"></div>
+
+        <h2>Send Transaction</h2>
+        <input id="to" placeholder="Recipient Address">
+        <input id="amount" placeholder="Amount">
+        <button id="sendTx">Send</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
