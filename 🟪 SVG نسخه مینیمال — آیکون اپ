@@ -1,0 +1,28 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#8BE9FD"/>
+      <stop offset="100%" stop-color="#6A2BEA"/>
+    </radialGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)" />
+
+  <text x="50%" y="55%"
+        text-anchor="middle"
+        font-family="Segoe UI, Roboto, sans-serif"
+        font-size="300"
+        font-weight="700"
+        fill="#FFFFFF"
+        filter="url(#glow)">
+    APZ
+  </text>
+</svg>
