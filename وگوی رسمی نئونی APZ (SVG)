@@ -1,0 +1,50 @@
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- گرادیان نئونی پس‌زمینه -->
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#8BE9FD"/>
+      <stop offset="50%" stop-color="#6A2BEA"/>
+      <stop offset="100%" stop-color="#0A0F2C"/>
+    </radialGradient>
+
+    <!-- افکت Glow نئونی -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feColorMatrix
+        in="blur"
+        type="matrix"
+        values="0 0 0 0 0.55
+                0 0 0 0 0.90
+                0 0 0 0 1
+                0 0 0 1 0"/>
+    </filter>
+
+    <!-- گرادیان متن APZ -->
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8BE9FD"/>
+      <stop offset="100%" stop-color="#6A2BEA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- پس‌زمینه دایره‌ای نئونی -->
+  <circle cx="160" cy="160" r="130" fill="url(#bgGradient)" />
+
+  <!-- حلقه نئونی دور لوگو -->
+  <circle cx="160" cy="160" r="120"
+          fill="none"
+          stroke="#8BE9FD"
+          stroke-width="4"
+          filter="url(#neonGlow)" />
+
+  <!-- متن APZ -->
+  <text x="50%" y="50%"
+        text-anchor="middle"
+        dominant-baseline="central"
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="72"
+        font-weight="700"
+        fill="url(#textGradient)"
+        filter="url(#neonGlow)">
+    APZ
+  </text>
+</svg>
