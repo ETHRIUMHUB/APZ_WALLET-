@@ -1,0 +1,23 @@
+export default class APZProvider {
+    constructor(config) {
+        this.config = config;
+    }
+
+    async rpc(method, params = []) {
+        const response = await fetch(this.config.rpc, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params })
+        });
+
+        return await response.json();
+    }
+
+    async getBalance(address) {
+        return this.rpc("apz_getBalance", [address]);
+    }
+
+    async sendRawTransaction(rawTx) {
+        return this.rpc("apz_sendRawTransaction", [rawTx]);
+    }
+}
