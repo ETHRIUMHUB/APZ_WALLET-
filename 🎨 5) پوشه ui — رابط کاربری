@@ -1,0 +1,9 @@
+ui/
+├── WelcomeScreen.kt
+├── OnboardingScreen.kt
+├── CreateWalletScreen.kt
+├── NeonTransactionScreen.kt
+├── SplashScreen.kt
+├── index.html          (نسخه وب)
+├── styles.css
+└── app.js
