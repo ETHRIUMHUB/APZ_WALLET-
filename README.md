@@ -35,6 +35,28 @@ APZ WALLET با هدف شفافیت، سرعت و قابلیت بازتولید 
 ---
 
 ## 🧩 Project Structure | ساختار پروژه
+apz-wallet/ ├── android/        # Android mobile version ├── web/            # Web version ├── core/           # Wallet & transaction logic ├── crypto/         # Key generation & signing ├── network/        # RPC communication ├── ui/             # User interface ├── assets/         # Logos, posters, intro video └── docs/           # Documentation
+---
+
+## 🚀 Install & Run (Web) | نصب و اجرا (وب)
+**English:**
+```bash
+git clone https://github.com/apz-chain/apz-wallet.git
+cd apz-wallet/web
+npm install
+python3 -m http.server 8080
+Documentation
+📱 Install & Run (Android) | نصب و اجرا (اندروید)English:کپی کردنbashcd apz-wallet/android
+./gradlew assembleReleaseAPK output:
+app/build/outputs/apk/release/app-release.apkفارسی:
+با دستور بالا نسخه‌ی Release ساخته می‌شود و فایل APK در مسیر مشخص قرار می‌گیرد.
+🔐 Security | امنیتPrivate keys are stored only on the user’s device.No sensitive data is sent to external servers.Recommended: client-side encryption & secure storage for production.کلید خصوصی فقط روی دستگاه کاربر ذخیره می‌شود و هیچ داده‌ی حساسی به سرورهای خارجی ارسال نمی‌شود.
+برای نسخه عملیاتی، رمزنگاری سمت‌کاربر و Secure Storage توصیه می‌شود.
+🤝 Contribution | مشارکتEnglish:
+Bug reports, feature requests and PRs are welcome.
+Please follow clear, printable templates for contributions.فارسی:
+گزارش خطا، پیشنهاد ویژگی و Pull Request پذیرفته می‌شود.
+لطفاً از قالب‌های شفاف و قابل‌چاپ برای مشارکت استفاده کنید.
 ❤️ Author | سازندهCreated with passion by Khalil Heyrani
 ساخته‌شده با عشق توسط خلیل حیرانیAPZ Chain — Future of Transparent Infrastructure
 APZ Chain — آینده‌ای شفاف و قابل‌اعتماد
