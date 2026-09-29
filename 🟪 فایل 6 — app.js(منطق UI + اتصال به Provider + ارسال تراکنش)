@@ -1,0 +1,33 @@
+import APZProvider from "../core/apz-provider.js";
+import APZWallet from "../core/apz-wallet.js";
+import APZTransaction from "../core/apz-transaction.js";
+
+const provider = new APZProvider({
+    rpc: "https://rpc.apz-chain.org"
+});
+
+let wallet = null;
+
+document.getElementById("createWallet").onclick = () => {
+    wallet = new APZWallet();
+    document.getElementById("walletInfo").innerHTML = `
+        <p>Address: ${wallet.address}</p>
+    `;
+};
+
+document.getElementById("sendTx").onclick = async () => {
+    const to = document.getElementById("to").value;
+    const amount = document.getElementById("amount").value;
+
+    const tx = new APZTransaction({
+        from: wallet.address,
+        to,
+        amount,
+        nonce: Date.now()
+    });
+
+    const signed = wallet.sign(tx.serialize());
+    const result = await provider.sendRawTransaction(Buffer.from(signed).toString("hex"));
+
+    document.getElementById("result").innerHTML = JSON.stringify(result);
+};
