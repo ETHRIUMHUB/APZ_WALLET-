@@ -1,0 +1,54 @@
+ساختار پروژه:
+apz-wallet-android/
+├── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── AndroidManifest.xml
+│   │   │   ├── java/org/apz/wallet/MainActivity.kt
+│   │   │   └── res/...
+│   └── build.gradle
+└── settings.gradle
+۲. فایل نمونه build.gradle (ماژول app)
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "org.apz.wallet"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "org.apz.wallet"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.5.3"
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core-ktx:1.13.1"
+    implementation "androidx.activity:activity-compose:1.9.0"
+    implementation "androidx.compose.ui:ui:1.6.7"
+    implementation "androidx.compose.material3:material3:1.2.1"
+}
+۳. فایل نمونه MainActivity.kt
+۴. منطق کیف‌پول در اندرویدمی‌تونی همان منطق crypto.js و apz-provider.js را به Kotlin منتقل کنی:کلاس APZWallet برای تولید کلید و آدرسکلاس APZProvider برای تماس HTTP با APZ RPCاستفاده از OkHttp یا Ktor برای درخواست‌ها۵. بیلد APKدر Android Studio یا خط فرمان:کپی کردنbash./gradlew assembleRelease
+خروجی:
+app/build/outputs/apk/release/app-release.apk
+که می‌تونی روی دستگاه اندروید 13 نصب کنی (با فعال‌کردن نصب از منابع ناشناس).
