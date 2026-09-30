@@ -1,0 +1,40 @@
+website/
+├── docusaurus.config.js
+├── sidebars.js
+└── docs/
+    ├── index.md
+    ├── getting-started/
+    │   ├── introduction.md
+    │   ├── installation.md
+    │   ├── apz-wallet-guide.md
+    │   └── glossary.md
+    ├── apz-chain/
+    │   ├── architecture.md
+    │   ├── consensus.md
+    │   ├── rpc-endpoints.md
+    │   ├── security-model.md
+    │   └── networks.md
+    ├── developers/
+    │   ├── sdk-setup.md
+    │   ├── key-management.md
+    │   ├── transaction-format.md
+    │   ├── signing.md
+    │   ├── smart-contracts.md
+    │   └── examples.md
+    ├── apz-wallet/
+    │   ├── android.md
+    │   ├── web.md
+    │   ├── ui-ux.md
+    │   ├── reproducible-builds.md
+    │   └── troubleshooting.md
+    ├── license/
+    │   ├── apz-license.md
+    │   └── mit.md
+    └── fa/
+        ├── index.md
+        ├── introduction.md
+        ├── installation.md
+        ├── architecture.md
+        ├── rpc.md
+        ├── wallet.md
+        └── developers.md
