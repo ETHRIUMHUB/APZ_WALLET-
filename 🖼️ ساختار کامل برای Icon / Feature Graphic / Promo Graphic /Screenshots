@@ -1,0 +1,10 @@
+android/
+└── assets/
+    ├── highres-icon.png        # 512×512
+    ├── featureGraphic.png      # 1024×500
+    ├── promoGraphic.png        # 1280×720
+    └── screenshots/
+        └── phone/
+            ├── screenshot1.png
+            ├── screenshot2.png
+            └── ...
