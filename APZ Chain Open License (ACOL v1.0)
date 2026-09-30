@@ -1,0 +1,43 @@
+APZ Chain Open License (ACOL) v1.0
+Copyright (c) 2026 Khalil Heyrani
+
+Permission is hereby granted to any individual or organization to use,
+copy, modify, merge, publish, distribute, and build upon this software,
+provided that all conditions below are met:
+
+1. Transparency Requirement  
+   Any modified or redistributed version of this software must clearly
+   document all changes and preserve transparency in its architecture,
+   security model, and build process.
+
+2. Reproducibility Requirement  
+   Any distributed binary (APK, EXE, APP, etc.) must include instructions
+   or scripts that allow users to reproduce the build from source without
+   relying on proprietary or closed-source services.
+
+3. Privacy & User Rights  
+   This software, or any derivative work, may not collect, store, or
+   transmit user data without explicit consent. All private keys must
+   remain on the user’s device and may not be transmitted or logged.
+
+4. Ethical Use  
+   This software may not be used for surveillance, exploitation, or any
+   activity that compromises user dignity, autonomy, or digital rights.
+
+5. Branding Protection  
+   The name “APZ Chain”, “APZ WALLET”, logos, and visual identity may be
+   used only for truthful representation of the original project.  
+   Misleading branding or impersonation is prohibited.
+
+6. Open Contribution  
+   Any improvements, fixes, or enhancements to the core cryptography,
+   RPC logic, or reproducibility tools must be shared publicly unless
+   they contain sensitive security information.
+
+7. Liability  
+   The software is provided “AS IS”, without warranty of any kind.
+   The authors are not liable for any damages arising from use of this
+   software or its derivatives.
+
+By using, modifying, or distributing this software, you agree to the
+terms of the APZ Chain Open License (ACOL) v1.0.
