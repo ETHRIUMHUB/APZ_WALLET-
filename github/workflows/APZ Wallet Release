@@ -1,0 +1,49 @@
+name: APZ Wallet Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install pandoc and LaTeX
+        run: |
+          sudo apt update
+          sudo apt install -y pandoc texlive texlive-xetex texlive-fonts-recommended texlive-latex-extra
+
+      - name: Build Android APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Build Docs PDF
+        run: |
+          mkdir -p build/pdf
+          pandoc $(find docs -type f -name "*.md" ! -path "docs/fa/*") \
+            -o build/pdf/APZ-Chain-Documentation.pdf --toc --pdf-engine=xelatex
+          pandoc $(find docs/fa -type f -name "*.md") \
+            -o build/pdf/APZ-Chain-Documentation-FA.pdf --toc --pdf-engine=xelatex
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            android/app/build/outputs/apk/release/app-release.apk
+            build/pdf/APZ-Chain-Documentation.pdf
+            build/pdf/APZ-Chain-Documentation-FA.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
