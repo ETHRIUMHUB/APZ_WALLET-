@@ -1,0 +1,60 @@
+name: Build APZ Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y pandoc texlive texlive-xetex texlive-fonts-recommended texlive-latex-extra
+
+      - name: Create build directories
+        run: |
+          mkdir -p build/html
+          mkdir -p build/pdf
+
+      - name: Build English HTML docs
+        run: |
+          for file in $(find docs -type f -name "*.md" ! -path "docs/fa/*"); do
+            pandoc "$file" -o "build/html/$(basename "$file" .md).html";
+          done
+
+      - name: Build Persian HTML docs
+        run: |
+          for file in $(find docs/fa -type f -name "*.md"); do
+            pandoc "$file" -o "build/html/fa-$(basename "$file" .md).html";
+          done
+
+      - name: Build English PDF
+        run: |
+          pandoc \
+            $(find docs -type f -name "*.md" ! -path "docs/fa/*") \
+            -o build/pdf/APZ-Chain-Documentation.pdf \
+            --toc \
+            --pdf-engine=xelatex
+
+      - name: Build Persian PDF
+        run: |
+          pandoc \
+            $(find docs/fa -type f -name "*.md") \
+            -o build/pdf/APZ-Chain-Documentation-FA.pdf \
+            --toc \
+            --pdf-engine=xelatex
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: apz-docs
+          path: build/
