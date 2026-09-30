@@ -1,0 +1,59 @@
+name: APZ Wallet Security & Lint Checks
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  security-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install ktlint
+        run: |
+          curl -sSLO https://github.com/pinterest/ktlint/releases/latest/download/ktlint
+          chmod +x ktlint
+
+      - name: Run ktlint
+        run: |
+          ./ktlint "android/**/*.kt" || true
+
+      - name: Install detekt
+        run: |
+          curl -sSLO https://github.com/detekt/detekt/releases/latest/download/detekt-cli.jar
+
+      - name: Run detekt
+        run: |
+          java -jar detekt-cli.jar --input android/app/src/main/java --report html:detekt-report.html
+
+      - name: Android Lint
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew lint
+
+      - name: GitLeaks Security Scan
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: ""
+          fail: true
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-lint-reports
+          path: |
+            detekt-report.html
+            android/app/build/reports/lint-results.html
