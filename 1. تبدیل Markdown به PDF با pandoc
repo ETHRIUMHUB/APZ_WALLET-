@@ -1,0 +1,11 @@
+pandoc docs/index.md \
+      docs/getting-started/introduction.md \
+      docs/getting-started/installation.md \
+      docs/apz-chain/architecture.md \
+      docs/apz-chain/rpc-endpoints.md \
+      docs/developers/sdk-setup.md \
+      docs/apz-wallet/android.md \
+      docs/license/apz-license.md \
+      -o APZ-Chain-Documentation.pdf \
+      --toc \
+      --pdf-engine=xelatex
