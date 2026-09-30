@@ -1,0 +1,10 @@
+pandoc docs/fa/index.md \
+      docs/fa/introduction.md \
+      docs/fa/installation.md \
+      docs/fa/architecture.md \
+      docs/fa/rpc.md \
+      docs/fa/wallet.md \
+      docs/fa/developers.md \
+      -o APZ-Chain-Documentation-FA.pdf \
+      --toc \
+      --pdf-engine=xelatex
