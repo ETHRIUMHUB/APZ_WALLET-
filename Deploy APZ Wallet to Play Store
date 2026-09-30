@@ -1,0 +1,54 @@
+name: Deploy APZ Wallet to Play Store
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  deploy-playstore:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > apz-release.keystore
+
+      - name: Install Fastlane
+        run: |
+          sudo apt update
+          sudo apt install -y ruby ruby-dev
+          sudo gem install fastlane -NV
+
+      - name: Build Signed AAB
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew bundleRelease \
+            -Pandroid.injected.signing.store.file=../apz-release.keystore \
+            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+
+      - name: Prepare Fastlane
+        run: |
+          mkdir -p android/fastlane
+          echo "${{ secrets.PLAYSTORE_JSON_KEY }}" | base64 --decode > android/fastlane/playstore.json
+
+      - name: Deploy to Play Store
+        run: |
+          cd android
+          fastlane supply \
+            --aab app/build/outputs/bundle/release/app-release.aab \
+            --track production \
+            --json_key fastlane/playstore.json \
+            --package_name org.apz.wallet
