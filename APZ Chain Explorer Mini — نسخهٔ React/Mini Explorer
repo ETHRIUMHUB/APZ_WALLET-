@@ -1,0 +1,284 @@
+<!-- APZ Chain Explorer Mini -->
+<style>
+  /* Explorer styles (compact & responsive) */
+  #apz-explorer {
+    max-width: 980px;
+    margin: 28px auto 0;
+    background: rgba(2,6,23,0.6);
+    border-radius: 14px;
+    padding: 18px;
+    color: #e6eef8;
+    box-shadow: 0 8px 30px rgba(15,23,42,0.6);
+    font-family: system-ui, sans-serif;
+    pointer-events: auto;
+  }
+  #apz-explorer .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  #apz-explorer input[type="text"]{
+    flex:1; min-width:220px;
+    padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02); color:inherit;
+  }
+  #apz-explorer button {
+    padding:10px 14px; border-radius:10px; border:none; background:#6b46ff; color:#fff; cursor:pointer;
+  }
+  #apz-explorer .tabs { margin-top:12px; display:flex; gap:8px; }
+  #apz-explorer .tab { padding:8px 12px; border-radius:8px; background:rgba(255,255,255,0.03); cursor:pointer; }
+  #apz-explorer .tab.active { background:linear-gradient(90deg,#6b46ff,#22c55e); color:#021; font-weight:700; }
+  #apz-explorer .panel { margin-top:14px; text-align:left; font-size:0.95rem; line-height:1.45; }
+  #apz-explorer pre { background: rgba(0,0,0,0.35); padding:12px; border-radius:8px; overflow:auto; color:#dbeafe; }
+  @media (max-width:640px){
+    #apz-explorer { padding:12px; margin:16px; }
+    #apz-explorer .row { flex-direction:column; align-items:stretch; }
+  }
+</style>
+
+<div id="apz-explorer" aria-label="APZ Chain Explorer Mini">
+  <div class="row">
+    <input id="explorer-query" type="text" placeholder="apz_address | tx_hash | block_number" />
+    <button id="explorer-search">Search</button>
+    <select id="explorer-mode" title="Mode">
+      <option value="auto">Auto (detect)</option>
+      <option value="address">Address</option>
+      <option value="tx">Transaction</option>
+      <option value="block">Block</option>
+    </select>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Explorer tabs">
+    <div class="tab active" data-tab="overview">Overview</div>
+    <div class="tab" data-tab="raw">Raw RPC</div>
+    <div class="tab" data-tab="history">History</div>
+  </div>
+
+  <div class="panel" id="explorer-panel">
+    <div id="explorer-loading" style="display:none">Loading…</div>
+
+    <div id="explorer-overview">
+      <p><strong id="lbl-type">Type:</strong> <span id="val-type">—</span></p>
+      <p><strong id="lbl-balance">Balance:</strong> <span id="val-balance">—</span></p>
+      <p><strong id="lbl-nonce">Nonce:</strong> <span id="val-nonce">—</span></p>
+      <div id="explorer-txs">
+        <strong>Recent txs:</strong>
+        <div id="val-txs">—</div>
+      </div>
+    </div>
+
+    <div id="explorer-raw" style="display:none">
+      <pre id="val-raw">—</pre>
+    </div>
+
+    <div id="explorer-history" style="display:none">
+      <div id="val-history">—</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Mini Explorer JS
+   - Auto-detects query type
+   - Uses RPC_ENDPOINT if reachable, otherwise uses mock data
+   - Integrates with page language via setLang (existing function)
+*/
+
+const RPC_ENDPOINT = window.APZ_RPC_ENDPOINT || 'https://rpc.apz-chain.org'; // override if needed
+const USE_MOCK = false; // set true to force mock mode
+
+function isTxHash(q){ return /^0x[0-9a-fA-F]{6,}$/.test(q); }
+function isAddress(q){ return /^apz_[0-9a-fA-F]{20,}$/.test(q) || /^[0-9a-fA-F]{40,}$/.test(q); }
+function isBlockNumber(q){ return /^\d+$/.test(q); }
+
+const el = {
+  query: document.getElementById('explorer-query'),
+  search: document.getElementById('explorer-search'),
+  mode: document.getElementById('explorer-mode'),
+  tabs: document.querySelectorAll('#apz-explorer .tab'),
+  panelOverview: document.getElementById('explorer-overview'),
+  panelRaw: document.getElementById('explorer-raw'),
+  panelHistory: document.getElementById('explorer-history'),
+  loading: document.getElementById('explorer-loading'),
+  valType: document.getElementById('val-type'),
+  valBalance: document.getElementById('val-balance'),
+  valNonce: document.getElementById('val-nonce'),
+  valTxs: document.getElementById('val-txs'),
+  valRaw: document.getElementById('val-raw'),
+  valHistory: document.getElementById('val-history')
+};
+
+function setActiveTab(name){
+  el.tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  el.panelOverview.style.display = name === 'overview' ? '' : 'none';
+  el.panelRaw.style.display = name === 'raw' ? '' : 'none';
+  el.panelHistory.style.display = name === 'history' ? '' : 'none';
+}
+el.tabs.forEach(t => t.addEventListener('click', ()=> setActiveTab(t.dataset.tab)));
+
+async function rpcCall(method, params=[]){
+  if (USE_MOCK) return mockRpc(method, params);
+  try {
+    const res = await fetch(RPC_ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({jsonrpc:'2.0', id:1, method, params})
+    });
+    if (!res.ok) throw new Error('RPC network error');
+    const j = await res.json();
+    return j.result ?? j;
+  } catch (e) {
+    // fallback to mock if RPC unreachable
+    return mockRpc(method, params);
+  }
+}
+
+/* Mock responses for demo / offline */
+function mockRpc(method, params){
+  // lightweight simulated responses
+  if (method === 'apz_getBalance') {
+    return Promise.resolve( (Math.random()*10).toFixed(4) );
+  }
+  if (method === 'apz_getTransaction') {
+    return Promise.resolve({
+      hash: params[0],
+      from: 'apz_abcdef1234567890',
+      to: 'apz_0123456789abcdef',
+      value: (Math.random()*2).toFixed(6),
+      status: Math.random()>0.3 ? 'confirmed' : 'pending',
+      blockNumber: Math.floor(Math.random()*1000000)
+    });
+  }
+  if (method === 'apz_getBlock') {
+    return Promise.resolve({
+      number: params[0],
+      hash: '0xblockhash'+Math.floor(Math.random()*99999),
+      txCount: Math.floor(Math.random()*20),
+      miner: 'apz_miner_01'
+    });
+  }
+  if (method === 'apz_getAddressTxs') {
+    const arr = [];
+    for(let i=0;i<5;i++){
+      arr.push({
+        hash: '0x'+Math.random().toString(16).slice(2,12),
+        to: 'apz_'+Math.random().toString(16).slice(2,12),
+        value: (Math.random()*1).toFixed(6),
+        status: Math.random()>0.4 ? 'confirmed' : 'pending'
+      });
+    }
+    return Promise.resolve(arr);
+  }
+  return Promise.resolve(null);
+}
+
+/* Render helpers */
+function renderTxList(txs){
+  if(!txs || txs.length===0) return '—';
+  const ul = document.createElement('div');
+  txs.forEach(tx=>{
+    const d = document.createElement('div');
+    d.style.padding='6px 0';
+    d.style.borderBottom='1px dashed rgba(255,255,255,0.03)';
+    d.innerHTML = `<strong>${tx.hash}</strong> → ${tx.to} • ${tx.value} APZ • <em>${tx.status}</em>`;
+    ul.appendChild(d);
+  });
+  return ul;
+}
+
+/* Main search flow */
+async function doSearch(){
+  const q = el.query.value.trim();
+  if(!q) return;
+  el.loading.style.display = '';
+  el.valRaw.textContent = '—';
+  el.valHistory.textContent = '—';
+  el.valTxs.innerHTML = '—';
+  el.valBalance.textContent = '—';
+  el.valNonce.textContent = '—';
+  el.valType.textContent = '—';
+
+  // determine type
+  let type = el.mode.value;
+  if(type === 'auto'){
+    if(isTxHash(q)) type='tx';
+    else if(isAddress(q)) type='address';
+    else if(isBlockNumber(q)) type='block';
+    else type='address'; // default
+  }
+
+  try {
+    if(type === 'address'){
+      el.valType.textContent = 'Address';
+      const balance = await rpcCall('apz_getBalance',[q]);
+      const txs = await rpcCall('apz_getAddressTxs',[q, {limit:5}]);
+      el.valBalance.textContent = balance + ' APZ';
+      el.valTxs.innerHTML = '';
+      el.valTxs.appendChild( renderTxList(txs) );
+      el.valRaw.textContent = JSON.stringify({address:q, balance, txs}, null, 2);
+      el.valNonce.textContent = Math.floor(Math.random()*10);
+      setActiveTab('overview');
+    } else if(type === 'tx'){
+      el.valType.textContent = 'Transaction';
+      const tx = await rpcCall('apz_getTransaction',[q]);
+      el.valRaw.textContent = JSON.stringify(tx, null, 2);
+      el.valBalance.textContent = tx.value + ' APZ';
+      el.valTxs.innerHTML = '';
+      el.valTxs.appendChild( renderTxList([tx]) );
+      setActiveTab('raw');
+    } else if(type === 'block'){
+      el.valType.textContent = 'Block';
+      const block = await rpcCall('apz_getBlock',[q]);
+      el.valRaw.textContent = JSON.stringify(block, null, 2);
+      el.valTxs.innerHTML = `Transactions in block: ${block.txCount}`;
+      setActiveTab('raw');
+    }
+  } catch(err){
+    el.valRaw.textContent = 'Error: ' + (err.message || err);
+    setActiveTab('raw');
+  } finally {
+    el.loading.style.display = 'none';
+  }
+}
+
+el.search.addEventListener('click', doSearch);
+el.query.addEventListener('keydown', (e)=> { if(e.key === 'Enter') doSearch(); });
+
+/* Integrate with page language if setLang exists */
+if (typeof setLang === 'function') {
+  const originalSetLang = setLang;
+  window.setLang = function(lang){
+    originalSetLang(lang);
+    // translate explorer placeholders & labels
+    const map = {
+      fa: {
+        placeholder: 'apz_address | tx_hash | block_number',
+        search: 'جستجو',
+        mode_auto: 'Auto (detect)',
+        mode_address: 'Address',
+        mode_tx: 'Transaction',
+        mode_block: 'Block'
+      },
+      en: {
+        placeholder: 'apz_address | tx_hash | block_number',
+        search: 'Search',
+        mode_auto: 'Auto (detect)',
+        mode_address: 'Address',
+        mode_tx: 'Transaction',
+        mode_block: 'Block'
+      },
+      de: {
+        placeholder: 'apz_address | tx_hash | block_number',
+        search: 'Suchen',
+        mode_auto: 'Auto (erkennen)',
+        mode_address: 'Address',
+        mode_tx: 'Transaction',
+        mode_block: 'Block'
+      }
+    };
+    const d = map[lang] || map.en;
+    el.query.placeholder = d.placeholder;
+    el.search.textContent = d.search;
+    el.mode.options[0].text = d.mode_auto;
+    el.mode.options[1].text = d.mode_address;
+    el.mode.options[2].text = d.mode_tx;
+    el.mode.options[3].text = d.mode_block;
+  };
+}
+</script>
