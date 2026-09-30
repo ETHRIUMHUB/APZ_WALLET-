@@ -1,0 +1,129 @@
+# APZ Chain Open License (ACOL) v1.0
+A transparent, ethical and reproducible open-source license for APZ Chain  
+طراحی‌شده برای شفافیت، اخلاق، و بازتولیدپذیری در اکوسیستم APZ
+
+---
+
+## 📜 1. Copyright
+Copyright (c) 2026 Khalil Heyrani  
+All rights reserved under the APZ Chain Open License (ACOL).
+
+---
+
+## 🔓 2. Permission Grant
+Permission is hereby granted to any individual or organization to:
+
+- Use the software  
+- Copy the software  
+- Modify the software  
+- Merge the software  
+- Publish the software  
+- Distribute the software  
+- Build upon the software  
+
+**As long as all conditions below are met.**
+
+---
+
+## 🟦 3. Transparency Requirement
+Any modified or redistributed version **must clearly document all changes**  
+and preserve transparency in:
+
+- Architecture  
+- Security model  
+- Build process  
+- RPC interactions  
+- Cryptographic logic  
+
+---
+
+## 🟪 4. Reproducibility Requirement
+Any distributed binary (APK, EXE, APP, etc.) **must include reproducible build instructions**,  
+allowing users to rebuild the software from source **without relying on closed-source services**.
+
+This ensures:
+
+- Trust  
+- Auditability  
+- Long-term independence  
+
+---
+
+## 🔐 5. Privacy & User Rights
+The software or any derivative **may NOT**:
+
+- Collect user data without explicit consent  
+- Store private keys outside the user’s device  
+- Transmit private keys or seed phrases  
+- Log sensitive information  
+
+User dignity, autonomy, and privacy **must be protected at all times**.
+
+---
+
+## ⚖️ 6. Ethical Use
+The software may NOT be used for:
+
+- Surveillance  
+- Exploitation  
+- Harmful profiling  
+- Violations of digital rights  
+- Any activity compromising user dignity  
+
+APZ Chain stands for ethical technology.
+
+---
+
+## 🌀 7. Branding Protection
+The following are protected:
+
+- “APZ Chain”  
+- “APZ WALLET”  
+- APZ logos  
+- APZ neon identity  
+
+You may use APZ branding **only for truthful representation**.  
+Misleading branding or impersonation is strictly prohibited.
+
+---
+
+## 🔧 8. Open Contribution Requirement
+Any improvements to:
+
+- Cryptography  
+- RPC logic  
+- Reproducibility tools  
+- Security models  
+
+**must be shared publicly**, unless they contain sensitive security information.
+
+This ensures APZ remains a transparent and community-driven ecosystem.
+
+---
+
+## ⚠️ 9. Liability
+The software is provided **“AS IS”**, without warranty of any kind.
+
+The authors are **not liable** for:
+
+- Damages  
+- Losses  
+- Security incidents  
+- Misuse  
+- Derivative failures  
+
+Use at your own risk.
+
+---
+
+## 📝 10. Acceptance
+By using, modifying, or distributing this software,  
+you agree to the terms of the **APZ Chain Open License (ACOL) v1.0**.
+
+---
+
+## ❤️ Author
+Created with passion by **Khalil Heyrani**  
+For a transparent, ethical and reproducible digital future.
+
+APZ Chain — Future of Transparent Infrastructure
