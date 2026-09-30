@@ -1,0 +1,59 @@
+name: APZ Wallet UI Tests (Background Services Matrix)
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [29, 30, 33]
+        arch: [x86_64, arm64-v8a]
+        screen: [phone, tablet]
+        background: [normal, medium, heavy]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run Emulator with Background Load
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: ${{ matrix.arch }}
+          profile: ${{ matrix.screen }}
+          script: |
+            # Background Services Load Profiles
+            if [ "${{ matrix.background }}" = "medium" ]; then
+              adb shell "for i in 1 2 3; do while :; do :; done & done"
+              adb shell "logcat -G 1M"
+            fi
+
+            if [ "${{ matrix.background }}" = "heavy" ]; then
+              adb shell "for i in 1 2 3 4 5; do while :; do :; done & done"
+              adb shell "logcat -G 512K"
+              adb shell "am start -a android.intent.action.MEDIA_SCANNER_SCAN_FILE"
+            fi
+
+            cd android
+            chmod +x gradlew
+            ./gradlew connectedDebugAndroidTest
+
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-report-bg-${{ matrix.api-level }}-${{ matrix.arch }}-${{ matrix.screen }}-${{ matrix.background }}
+          path: android/app/build/reports/androidTests/connected/
