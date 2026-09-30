@@ -1,0 +1,54 @@
+# Makefile — APZ Chain Documentation Builder
+
+DOCS_DIR=docs
+OUTPUT_DIR=build
+HTML_DIR=$(OUTPUT_DIR)/html
+PDF_DIR=$(OUTPUT_DIR)/pdf
+
+EN_DOCS=\
+  $(DOCS_DIR)/index.md \
+  $(DOCS_DIR)/getting-started/introduction.md \
+  $(DOCS_DIR)/getting-started/installation.md \
+  $(DOCS_DIR)/getting-started/apz-wallet-guide.md \
+  $(DOCS_DIR)/getting-started/glossary.md \
+  $(DOCS_DIR)/apz-chain/architecture.md \
+  $(DOCS_DIR)/apz-chain/consensus.md \
+  $(DOCS_DIR)/apz-chain/rpc-endpoints.md \
+  $(DOCS_DIR)/apz-chain/security-model.md \
+  $(DOCS_DIR)/apz-chain/networks.md \
+  $(DOCS_DIR)/developers/sdk-setup.md \
+  $(DOCS_DIR)/developers/key-management.md \
+  $(DOCS_DIR)/developers/transaction-format.md \
+  $(DOCS_DIR)/developers/signing.md \
+  $(DOCS_DIR)/developers/smart-contracts.md \
+  $(DOCS_DIR)/developers/examples.md \
+  $(DOCS_DIR)/license/apz-license.md \
+  $(DOCS_DIR)/license/mit.md
+
+FA_DOCS=\
+  $(DOCS_DIR)/fa/index.md \
+  $(DOCS_DIR)/fa/introduction.md \
+  $(DOCS_DIR)/fa/installation.md \
+  $(DOCS_DIR)/fa/architecture.md \
+  $(DOCS_DIR)/fa/rpc.md \
+  $(DOCS_DIR)/fa/wallet.md \
+  $(DOCS_DIR)/fa/developers.md
+
+all: html pdf
+
+html:
+	mkdir -p $(HTML_DIR)
+	for file in $(EN_DOCS); do \
+		pandoc $$file -o $(HTML_DIR)/$$(basename $$file .md).html; \
+	done
+	for file in $(FA_DOCS); do \
+		pandoc $$file -o $(HTML_DIR)/fa-$$(basename $$file .md).html; \
+	done
+
+pdf:
+	mkdir -p $(PDF_DIR)
+	pandoc $(EN_DOCS) -o $(PDF_DIR)/APZ-Chain-Documentation.pdf --toc --pdf-engine=xelatex
+	pandoc $(FA_DOCS) -o $(PDF_DIR)/APZ-Chain-Documentation-FA.pdf --toc --pdf-engine=xelatex
+
+clean:
+	rm -rf $(OUTPUT_DIR)
