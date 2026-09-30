@@ -1,0 +1,70 @@
+// sidebars.js
+module.exports = {
+  docsSidebar: [
+    {
+      type: 'category',
+      label: 'Getting Started',
+      items: [
+        'getting-started/introduction',
+        'getting-started/installation',
+        'getting-started/apz-wallet-guide',
+        'getting-started/glossary',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'APZ Chain',
+      items: [
+        'apz-chain/architecture',
+        'apz-chain/consensus',
+        'apz-chain/rpc-endpoints',
+        'apz-chain/security-model',
+        'apz-chain/networks',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Developers',
+      items: [
+        'developers/sdk-setup',
+        'developers/key-management',
+        'developers/transaction-format',
+        'developers/signing',
+        'developers/smart-contracts',
+        'developers/examples',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'APZ Wallet',
+      items: [
+        'apz-wallet/android',
+        'apz-wallet/web',
+        'apz-wallet/ui-ux',
+        'apz-wallet/reproducible-builds',
+        'apz-wallet/troubleshooting',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'License',
+      items: [
+        'license/apz-license',
+        'license/mit',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'فارسی',
+      items: [
+        'fa/index',
+        'fa/introduction',
+        'fa/installation',
+        'fa/architecture',
+        'fa/rpc',
+        'fa/wallet',
+        'fa/developers',
+      ],
+    },
+  ],
+};
