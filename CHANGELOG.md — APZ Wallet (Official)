@@ -1,0 +1,82 @@
+# APZ Wallet — CHANGELOG
+تمام تغییرات مهم این پروژه در این فایل ثبت می‌شود.  
+فرمت بر اساس **Semantic Versioning** و استاندارد **Keep a Changelog** است.
+
+---
+
+## [1.4.0] - 2026-09-30
+### Added
+- APZ Chain Explorer Mini (React/Next.js)
+- نسخهٔ سه‌زبانه (FA/EN/DE) برای Landing Page
+- Particle System پیشرفته (WebGL)
+- APZ Logo Glow + Intro انیمیشنی
+- Explorer RPC auto-detection (address/tx/block)
+- Mock RPC fallback برای تست آفلاین
+- README کامل برای تمام ماژول‌ها
+- تست Instrumentation واقعی برای Android
+
+### Improved
+- بهبود UI نئونی Landing Page
+- بهبود ساختار Docs و Wiki
+- بهینه‌سازی عملکرد WebGL برای دستگاه‌های ضعیف
+
+---
+
+## [1.3.0] - 2026-09-29
+### Added
+- Landing Page انیمیشنی (Canvas/WebGL)
+- نسخهٔ چندزبانه (FA/EN)
+- APZ Wallet GitHub Pages
+- Documentation PDF رسمی
+- ساختار کامل Docs شامل:
+  - INSTALLATION.md
+  - ARCHITECTURE.md
+  - SECURITY.md
+  - RPC-SPEC.md
+  - CRYPTO-SPEC.md
+  - UI-GUIDE.md
+  - TEST-MATRIX.md
+
+### Improved
+- بهبود README اصلی ریپو
+- بهبود ساختار پوشه‌ها برای انتشار جهانی
+
+---
+
+## [1.2.0] - 2026-09-28
+### Added
+- Matrix تست‌های پیشرفته:
+  - Gas Price Volatility Matrix
+  - Fork Simulation Matrix
+  - Pending Pool Chaos Matrix
+  - RPC Latency Matrix
+  - Blockchain Sync Matrix
+  - Mempool Congestion Matrix
+- CI/CD کامل برای Android + Web
+
+### Improved
+- بهبود ساختار GitHub Workflows
+- بهبود گزارش‌های تست
+
+---
+
+## [1.1.0] - 2026-09-27
+### Added
+- نسخهٔ کامل Android (Kotlin + Compose)
+- نسخهٔ کامل Web (HTML/CSS/JS)
+- Core TypeScript ماژولار
+- Crypto Engine با Rust
+- RPC Client با Go
+- ساختار کامل پروژه (Monorepo)
+
+### Improved
+- بهبود UI اندروید
+- بهبود ساختار Web UI
+
+---
+
+## [1.0.0] - 2026-09-25
+### Initial Release
+- ایجاد ریپوی APZ Wallet
+- ساختار اولیه Android + Web + Core + Crypto + RPC
+- اولین نسخهٔ قابل اجرا
