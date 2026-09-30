@@ -1,0 +1,137 @@
+apz-wallet/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── .github/
+│   ├── workflows/
+│   │   ├── android-ci.yml
+│   │   ├── ui-tests-matrix.yml
+│   │   ├── ui-tests-network-matrix.yml
+│   │   ├── ui-tests-theme-matrix.yml
+│   │   ├── ui-tests-battery-matrix.yml
+│   │   ├── ui-tests-storage-matrix.yml
+│   │   ├── ui-tests-memory-matrix.yml
+│   │   ├── ui-tests-cpu-matrix.yml
+│   │   ├── ui-tests-gpu-matrix.yml
+│   │   ├── ui-tests-background-matrix.yml
+│   │   ├── ui-tests-rpc-matrix.yml
+│   │   ├── ui-tests-blockchain-sync-matrix.yml
+│   │   ├── ui-tests-mempool-matrix.yml
+│   │   ├── ui-tests-gas-matrix.yml
+│   │   ├── ui-tests-fork-matrix.yml
+│   │   ├── ui-tests-pendingpool-matrix.yml
+│   │   └── release-build.yml
+│   └── ISSUE_TEMPLATE.md
+│
+├── android/
+│   ├── app/
+│   │   ├── src/
+│   │   │   ├── main/
+│   │   │   │   ├── AndroidManifest.xml
+│   │   │   │   ├── java/org/apz/wallet/
+│   │   │   │   │   ├── MainActivity.kt
+│   │   │   │   │   ├── WalletViewModel.kt
+│   │   │   │   │   ├── CryptoUtils.kt
+│   │   │   │   │   ├── RpcClient.kt
+│   │   │   │   │   ├── TransactionSigner.kt
+│   │   │   │   │   ├── KeyStoreManager.kt
+│   │   │   │   │   ├── NetworkMonitor.kt
+│   │   │   │   │   └── UiTheme.kt
+│   │   │   │   ├── res/
+│   │   │   │   │   ├── layout/
+│   │   │   │   │   ├── drawable/
+│   │   │   │   │   ├── values/
+│   │   │   │   │   └── mipmap/
+│   │   │   ├── test/
+│   │   │   └── androidTest/
+│   │   ├── build.gradle
+│   │   └── proguard-rules.pro
+│   ├── build.gradle
+│   ├── gradle.properties
+│   ├── settings.gradle
+│   └── assets/
+│       ├── highres-icon.png
+│       ├── featureGraphic.png
+│       ├── promoGraphic.png
+│       └── screenshots/
+│           └── phone/
+│               ├── screenshot1.png
+│               ├── screenshot2.png
+│               └── screenshot3.png
+│
+├── web/
+│   ├── index.html
+│   ├── style.css
+│   ├── app.js
+│   ├── wallet.js
+│   ├── rpc.js
+│   ├── crypto.js
+│   └── ui/
+│       ├── neon.css
+│       └── components/
+│           ├── header.html
+│           ├── footer.html
+│           └── wallet-card.html
+│
+├── core/
+│   ├── wallet.ts
+│   ├── signer.ts
+│   ├── rpc.ts
+│   ├── crypto.ts
+│   └── utils.ts
+│
+├── crypto/
+│   ├── keygen.rs
+│   ├── signer.rs
+│   ├── address.rs
+│   └── Cargo.toml
+│
+├── network/
+│   ├── rpc_client.go
+│   ├── mempool.go
+│   ├── sync.go
+│   └── go.mod
+│
+├── ui/
+│   ├── design-system/
+│   │   ├── colors.json
+│   │   ├── typography.json
+│   │   └── components.json
+│   └── animations/
+│       ├── neon.json
+│       └── transitions.json
+│
+├── fastlane/
+│   ├── Fastfile
+│   ├── Appfile
+│   └── metadata/
+│       └── android/
+│           ├── en-US/
+│           │   ├── title.txt
+│           │   ├── short_description.txt
+│           │   ├── full_description.txt
+│           │   ├── changelogs.txt
+│           │   └── images/
+│           │       ├── icon.png
+│           │       ├── featureGraphic.png
+│           │       ├── promoGraphic.png
+│           │       └── phoneScreenshots/
+│           └── fa-IR/
+│               ├── title.txt
+│               ├── short_description.txt
+│               ├── full_description.txt
+│               ├── changelogs.txt
+│               └── images/
+│                   ├── icon.png
+│                   ├── featureGraphic.png
+│                   ├── promoGraphic.png
+│                   └── phoneScreenshots/
+│
+└── docs/
+    ├── INSTALLATION.md
+    ├── ARCHITECTURE.md
+    ├── SECURITY.md
+    ├── RPC-SPEC.md
+    ├── CRYPTO-SPEC.md
+    ├── UI-GUIDE.md
+    └── TEST-MATRIX.md
