@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>APZ Chain Docs — Introduction</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- همان CSS قالب بالا را اینجا قرار بده یا فایل جداگانه لینک کن -->
+</head>
+<body>
+
+<header>
+  <h1>APZ Chain Docs</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="getting-started.html">Getting Started</a>
+    <a href="apz-chain.html">APZ Chain</a>
+    <a href="developers.html">Developers</a>
+    <a href="wallet.html">APZ Wallet</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Introduction to APZ Chain</h2>
+  <p>
+    APZ Chain is a transparent, reproducible and ethical blockchain ecosystem
+    designed for developers, researchers and users who value privacy and trust.
+  </p>
+
+  <h3>What you can do</h3>
+  <ul>
+    <li>Create wallets</li>
+    <li>Sign transactions locally</li>
+    <li>Interact with APZ RPC</li>
+    <li>Build apps on APZ Chain</li>
+    <li>Integrate APZ Wallet into your project</li>
+  </ul>
+</main>
+
+<footer>
+  Built with ❤️ by Khalil Heyrani — APZ Chain
+</footer>
+
+</body>
+</html>
