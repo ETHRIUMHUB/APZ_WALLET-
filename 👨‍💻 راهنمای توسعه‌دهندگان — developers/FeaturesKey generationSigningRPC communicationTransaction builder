@@ -1,0 +1,13 @@
+---
+
+# 🔐 مدل امنیتی — `apz-chain/security-model.md`
+
+```markdown
+# APZ Security Model
+
+APZ Chain enforces strict privacy and security rules:
+
+- Private keys never leave the device
+- No external data collection
+- Reproducible builds required
+- Ethical use enforced by ACOL License
