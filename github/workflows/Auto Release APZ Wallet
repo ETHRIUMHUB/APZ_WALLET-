@@ -1,0 +1,45 @@
+name: Auto Release APZ Wallet
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Changelog
+        id: changelog
+        uses: metcalfc/changelog-generator@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Build Docs PDF
+        run: |
+          mkdir -p build/pdf
+          pandoc $(find docs -type f -name "*.md" ! -path "docs/fa/*") \
+            -o build/pdf/APZ-Chain-Documentation.pdf --toc --pdf-engine=xelatex
+          pandoc $(find docs/fa -type f -name "*.md") \
+            -o build/pdf/APZ-Chain-Documentation-FA.pdf --toc --pdf-engine=xelatex
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{ steps.changelog.outputs.changelog }}
+          files: |
+            android/app/build/outputs/apk/release/app-release.apk
+            build/pdf/APZ-Chain-Documentation.pdf
+            build/pdf/APZ-Chain-Documentation-FA.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
