@@ -72,7 +72,7 @@ _______________________________________
 apz-wallet/
 ├── android/            # اپ اندروید (Kotlin + Compose)
 ├── web/                # نسخه وب (HTML/CSS/JS)
-├── core/               # هسته TypeScript
+├── core/               # هسته TypeScriptخ
 ├── crypto/             # رمزنگاری Rust
 ├── network/            # RPC Client با Go
 ├── explorer-react/     # APZ Chain Explorer Mini (Next.js)
