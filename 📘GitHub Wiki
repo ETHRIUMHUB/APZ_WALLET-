@@ -13,3 +13,115 @@
 - [Security](Security.md)
 - [Test Matrix](Test-Matrix.md)
 - [Build & Release](Build-Release.md)
+
+---
+Architecture.md
+# Architecture
+
+APZ Wallet یک معماری چندماژولی دارد:
+
+- Android Client (Kotlin + Compose)
+- Web Client (HTML/CSS/JS)
+- Core Logic (TypeScript)
+- Crypto Engine (Rust)
+- RPC Client (Go)
+- Full CI/CD Test Matrix
+- Fastlane Release Pipeline
+
+## اهداف معماری
+- امنیت بالا
+- سادگی توسعه
+- قابلیت تست‌پذیری
+- ماژولار بودن
+- قابلیت استفاده مجدد در پلتفرم‌های مختلف
+---
+Web.md
+# Web Client
+
+نسخهٔ وب APZ Wallet با HTML/CSS/JS ساخته شده است.
+
+## فایل‌ها
+- index.html
+- style.css
+- crypto.js
+- rpc.js
+- wallet.js
+- app.js
+
+## اجرا
+---
+Core.md
+# Core (TypeScript)
+
+هستهٔ اصلی کیف‌پول:
+
+- تولید آدرس
+- امضای تراکنش‌ها
+- ارتباط با RPC
+
+## فایل‌ها
+- wallet.ts
+- signer.ts
+- rpc.ts
+- utils.ts
+---
+Crypto.md
+# Crypto (Rust)
+
+ماژول رمزنگاری:
+
+- تولید آدرس
+- امضای پیام‌ها
+
+## Build
+---
+RPC.md
+# RPC & Network (Go)
+
+ماژول شبکه:
+
+- دریافت موجودی
+- ارسال تراکنش‌ها (در نسخهٔ بعدی)
+## اجرا
+---
+🔐 Security.md
+# Security
+
+- کلید خصوصی فقط روی دستگاه ذخیره می‌شود
+- هیچ سرور مرکزی وجود ندارد
+- ارتباط‌ها از طریق RPC امن انجام می‌شود
+- پیشنهاد: رمزگذاری کلیدها با AES256
+---
+🧪 Test-Matrix.md
+# Test Matrix
+
+پروژه شامل ماتریس‌های تست زیر است:
+
+- Device Matrix
+- API Level Matrix
+- Architecture Matrix
+- Network Matrix
+- Theme Matrix
+- Battery Matrix
+- Storage Matrix
+- Memory Pressure Matrix
+- CPU Load Matrix
+- GPU Load Matrix
+- Background Services Matrix
+- RPC Latency Matrix
+- Blockchain Sync Matrix
+- Mempool Congestion Matrix
+- Gas Price Volatility Matrix
+- Fork Simulation Matrix
+- Pending Pool Chaos Matrix
+---
+Build-Release.md
+# Build & Release
+
+## Android Release
+gradlew bundleRelease
+## Web Release
+Static hosting (Netlify / GitHub Pages)
+
+## Fastlane
+در مسیر fastlane/
