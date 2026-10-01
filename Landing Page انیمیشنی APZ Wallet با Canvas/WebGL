@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>APZ Wallet — Animated Landing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: system-ui, sans-serif;
+      overflow: hidden;
+    }
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+    .overlay {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      pointer-events: none;
+    }
+    .card {
+      max-width: 640px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 0 40px rgba(79, 70, 229, 0.8);
+      pointer-events: auto;
+    }
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+    p {
+      margin: 8px 0;
+      opacity: 0.9;
+    }
+    .links {
+      margin-top: 16px;
+    }
+    .links a {
+      display: inline-block;
+      margin: 4px 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #22c55e;
+      color: #022c22;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .lang-switch {
+      margin-top: 12px;
+    }
+    .lang-switch button {
+      margin: 0 4px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      background: #4f46e5;
+      color: #e5e7eb;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="overlay">
+  <div class="card">
+    <h1 id="title">کیف‌پول APZ</h1>
+    <p id="subtitle">
+      کیف‌پول سبک، امن و متن‌باز برای APZ Chain — ساخته‌شده توسط خلیل حیرانی
+    </p>
+    <p id="desc">
+      نسخه‌های اندروید، وب، هستهٔ TypeScript، رمزنگاری Rust و RPC Go در یک ریپوی واحد.
+    </p>
+
+    <div class="links">
+      <a id="github-link" href="https://github.com/asanpardaz/apz-wallet">مشاهده در GitHub</a>
+      <a id="docs-link" href="APZ-Wallet-Documentation.pdf">دانلود مستندات (PDF)</a>
+    </div>
+
+    <div class="lang-switch">
+      <button onclick="setLang('fa')">فارسی</button>
+      <button onclick="setLang('en')">English</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ====== Canvas / WebGL Neon Particles ======
+  const canvas = document.getElementById('bg');
+  const gl = canvas.getContext('webgl');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const vertexSrc = `
+    attribute vec2 a_position;
+    attribute float a_phase;
+    uniform float u_time;
+    uniform vec2 u_resolution;
+    varying float v_alpha;
+
+    void main() {
+      float t = u_time * 0.0005 + a_phase;
+      float radius = 0.2 + 0.1 * sin(t * 3.0);
+      float angle = t * 2.0;
+      vec2 pos = vec2(
+        radius * cos(angle),
+        radius * sin(angle)
+      );
+      pos *= vec2(u_resolution.y / u_resolution.x, 1.0);
+
+      gl_Position = vec4(pos, 0.0, 1.0);
+      gl_PointSize = 4.0 + 3.0 * sin(t * 5.0);
+      v_alpha = 0.4 + 0.3 * sin(t * 4.0);
+    }
+  `;
+
+  const fragmentSrc = `
+    precision mediump float;
+    varying float v_alpha;
+
+    void main() {
+      float r = 0.3;
+      float g = 0.7;
+      float b = 1.0;
+      float dist = length(gl_PointCoord - 0.5);
+      float glow = smoothstep(0.5, 0.0, dist);
+      gl_FragColor = vec4(r, g, b, v_alpha * glow);
+    }
+  `;
+
+  function createShader(type, src) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, src);
+    gl.compileShader(shader);
+    return shader;
+  }
+
+  const vs = createShader(gl.VERTEX_SHADER, vertexSrc);
+  const fs = createShader(gl.FRAGMENT_SHADER, fragmentSrc);
+  const program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  gl.useProgram(program);
+
+  const NUM = 400;
+  const positions = new Float32Array(NUM * 2);
+  const phases = new Float32Array(NUM);
+
+  for (let i = 0; i < NUM; i++) {
+    positions[i * 2] = 0;
+    positions[i * 2 + 1] = 0;
+    phases[i] = Math.random() * 10.0;
+  }
+
+  const posBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+  const phaseBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, phaseBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, phases, gl.STATIC_DRAW);
+
+  const aPos = gl.getAttribLocation(program, 'a_position');
+  const aPhase = gl.getAttribLocation(program, 'a_phase');
+  const uTime = gl.getUniformLocation(program, 'u_time');
+  const uRes = gl.getUniformLocation(program, 'u_resolution');
+
+  gl.enableVertexAttribArray(aPos);
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  gl.enableVertexAttribArray(aPhase);
+  gl.bindBuffer(gl.ARRAY_BUFFER, phaseBuffer);
+  gl.vertexAttribPointer(aPhase, 1, gl.FLOAT, false, 0, 0);
+
+  gl.clearColor(0.01, 0.02, 0.08, 1.0);
+
+  function render(time) {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(uTime, time);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.drawArrays(gl.POINTS, 0, NUM);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+
+  // ====== Multilingual Text ======
+  const fa = {
+    title: "کیف‌پول APZ",
+    subtitle: "کیف‌پول سبک، امن و متن‌باز برای APZ Chain — ساخته‌شده توسط خلیل حیرانی",
+    desc: "نسخه‌های اندروید، وب، هستهٔ TypeScript، رمزنگاری Rust و RPC Go در یک ریپوی واحد.",
+    github: "مشاهده در GitHub",
+    docs: "دانلود مستندات (PDF)"
+  };
+
+  const en = {
+    title: "APZ Wallet",
+    subtitle: "Lightweight, secure and open‑source wallet for APZ Chain — built by Khalil Heyrani",
+    desc: "Android, Web, TypeScript Core, Rust Crypto and Go RPC in a single repository.",
+    github: "View on GitHub",
+    docs: "Download Documentation (PDF)"
+  };
+
+  function setLang(lang) {
+    const d = lang === 'fa' ? fa : en;
+    document.body.style.direction = lang === 'fa' ? 'rtl' : 'ltr';
+    document.getElementById('title').innerText = d.title;
+    document.getElementById('subtitle').innerText = d.subtitle;
+    document.getElementById('desc').innerText = d.desc;
+    document.getElementById('github-link').innerText = d.github;
+    document.getElementById('docs-link').innerText = d.docs;
+  }
+
+  setLang('fa');
+</script>
+
+</body>
+</html>
