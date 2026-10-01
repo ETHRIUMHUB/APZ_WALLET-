@@ -1,0 +1,51 @@
+# APZ Wallet — Official Technical Documentation
+Version 1.0.0  
+Author: Khalil Heyrani
+
+---
+
+## 1. Introduction
+
+APZ Wallet یک کیف‌پول سبک، امن و متن‌باز برای APZ Chain است.  
+این سند، مرجع رسمی معماری، ماژول‌ها، امنیت و تست‌های سیستم است.
+
+---
+
+## 2. Architecture Overview
+
+### 2.1 Modules
+
+- Android Client (Kotlin + Jetpack Compose)
+- Web Client (HTML/CSS/JS)
+- Core Logic (TypeScript)
+- Crypto Engine (Rust)
+- RPC Client (Go)
+- CI/CD & Test Matrix
+- Fastlane Release Pipeline
+
+### 2.2 Design Goals
+
+- امنیت بالا
+- سادگی توسعه
+- ماژولار بودن
+- تست‌پذیری کامل
+- استقلال از سرورهای متمرکز
+
+---
+
+## 3. Android Client
+
+- زبان: Kotlin  
+- UI: Jetpack Compose  
+- State: ViewModel + StateFlow  
+- کلاس‌های کلیدی:
+  - `MainActivity`
+  - `WalletViewModel`
+  - `RpcClient`
+  - `KeyStoreManager`
+
+Build:
+
+```bash
+cd android
+./gradlew assembleRelease
