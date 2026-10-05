@@ -1,0 +1,5 @@
+val viewModel: HistoryViewModel = viewModel()
+LaunchedEffect(Unit) {
+    viewModel.loadHistory("0xYourAPZAddress")
+}
+val history by viewModel.history.collectAsState()
