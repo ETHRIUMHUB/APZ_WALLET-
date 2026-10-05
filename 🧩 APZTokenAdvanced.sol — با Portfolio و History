@@ -1,0 +1,289 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/**
+ * @title APZTokenAdvanced
+ * @dev APZ Token + On-chain Portfolio & History
+ *      - استاندارد ERC20 ساده
+ *      - ثبت تاریخچه تراکنش‌ها (History)
+ *      - نگه‌داری وضعیت پرتفوی هر آدرس (Portfolio snapshot)
+ *      طراحی شده برای APZ Chain و ماژول‌های ممیزی و داشبورد.
+ */
+contract APZTokenAdvanced {
+    // -------------------------
+    // Events
+    // -------------------------
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Mint(address indexed to, uint256 value);
+    event Burn(address indexed from, uint256 value);
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    event TxRecorded(
+        uint256 indexed txId,
+        address indexed from,
+        address indexed to,
+        uint256 amount,
+        uint256 timestamp,
+        string  txType
+    );
+
+    event PortfolioUpdated(
+        address indexed user,
+        uint256 balance,
+        uint256 totalReceived,
+        uint256 totalSent,
+        uint256 lastUpdated
+    );
+
+    // -------------------------
+    // Metadata
+    // -------------------------
+    string public name = "APZ Token";
+    string public symbol = "APZ";
+    uint8 public decimals = 18;
+
+    // -------------------------
+    // Storage
+    // -------------------------
+    uint256 public totalSupply;
+    address public owner;
+    address public minter;
+
+    mapping(address => uint256) private _balances;
+    mapping(address => mapping(address => uint256)) private _allowances;
+
+    // -------------------------
+    // History & Portfolio
+    // -------------------------
+
+    struct TxRecord {
+        uint256 id;
+        address from;
+        address to;
+        uint256 amount;
+        uint256 timestamp;
+        string  txType;   // "TRANSFER", "MINT", "BURN"
+    }
+
+    struct Portfolio {
+        uint256 balance;        // آخرین بالانس ثبت‌شده
+        uint256 totalReceived;  // مجموع دریافتی‌ها
+        uint256 totalSent;      // مجموع ارسالی‌ها
+        uint256 lastUpdated;    // آخرین زمان آپدیت
+    }
+
+    uint256 public nextTxId;
+    mapping(uint256 => TxRecord) public historyById;
+    mapping(address => uint256[]) public userTxIds;   // لیست شناسه تراکنش‌های مرتبط با هر آدرس
+    mapping(address => Portfolio) public portfolios;  // وضعیت پرتفوی هر آدرس
+
+    // -------------------------
+    // Modifiers
+    // -------------------------
+    modifier onlyOwner() {
+        require(msg.sender == owner, "APZ: caller is not owner");
+        _;
+    }
+
+    modifier onlyMinter() {
+        require(msg.sender == minter || msg.sender == owner, "APZ: caller is not minter");
+        _;
+    }
+
+    // -------------------------
+    // Constructor
+    // -------------------------
+    constructor(uint256 initialSupply, address initialOwner) {
+        require(initialOwner != address(0), "APZ: owner is zero address");
+        owner = initialOwner;
+        _mint(initialOwner, initialSupply);
+    }
+
+    // -------------------------
+    // ERC20 core
+    // -------------------------
+    function balanceOf(address account) external view returns (uint256) {
+        return _balances[account];
+    }
+
+    function allowance(address tokenOwner, address spender) external view returns (uint256) {
+        return _allowances[tokenOwner][spender];
+    }
+
+    function transfer(address to, uint256 amount) external returns (bool) {
+        _transfer(msg.sender, to, amount);
+        _recordTx(msg.sender, to, amount, "TRANSFER");
+        return true;
+    }
+
+    function approve(address spender, uint256 amount) external returns (bool) {
+        _approve(msg.sender, spender, amount);
+        return true;
+    }
+
+    function transferFrom(address from, address to, uint256 amount) external returns (bool) {
+        uint256 currentAllowance = _allowances[from][msg.sender];
+        require(currentAllowance >= amount, "APZ: transfer exceeds allowance");
+
+        _approve(from, msg.sender, currentAllowance - amount);
+        _transfer(from, to, amount);
+        _recordTx(from, to, amount, "TRANSFER");
+        return true;
+    }
+
+    // -------------------------
+    // Mint / Burn
+    // -------------------------
+    function setMinter(address newMinter) external onlyOwner {
+        require(newMinter != address(0), "APZ: minter is zero address");
+        minter = newMinter;
+    }
+
+    function mint(address to, uint256 amount) external onlyMinter {
+        _mint(to, amount);
+        _recordTx(address(0), to, amount, "MINT");
+    }
+
+    function burn(uint256 amount) external {
+        _burn(msg.sender, amount);
+        _recordTx(msg.sender, address(0), amount, "BURN");
+    }
+
+    function burnFrom(address from, uint256 amount) external {
+        uint256 currentAllowance = _allowances[from][msg.sender];
+        require(currentAllowance >= amount, "APZ: burn exceeds allowance");
+
+        _approve(from, msg.sender, currentAllowance - amount);
+        _burn(from, amount);
+        _recordTx(from, address(0), amount, "BURN");
+    }
+
+    // -------------------------
+    // Ownership
+    // -------------------------
+    function transferOwnership(address newOwner) external onlyOwner {
+        require(newOwner != address(0), "APZ: new owner is zero address");
+        emit OwnershipTransferred(owner, newOwner);
+        owner = newOwner;
+    }
+
+    // -------------------------
+    // Portfolio & History views
+    // -------------------------
+
+    // لیست شناسه تراکنش‌های یک کاربر
+    function getUserTxIds(address user) external view returns (uint256[] memory) {
+        return userTxIds[user];
+    }
+
+    // دریافت یک رکورد تراکنش
+    function getTxRecord(uint256 txId) external view returns (TxRecord memory) {
+        return historyById[txId];
+    }
+
+    // دریافت پرتفوی کاربر
+    function getPortfolio(address user) external view returns (Portfolio memory) {
+        return portfolios[user];
+    }
+
+    // -------------------------
+    // Internal helpers
+    // -------------------------
+    function _transfer(address from, address to, uint256 amount) internal {
+        require(from != address(0), "APZ: transfer from zero");
+        require(to != address(0), "APZ: transfer to zero");
+        require(_balances[from] >= amount, "APZ: insufficient balance");
+
+        _balances[from] -= amount;
+        _balances[to] += amount;
+
+        _updatePortfolioOnSend(from, amount);
+        _updatePortfolioOnReceive(to, amount);
+
+        emit Transfer(from, to, amount);
+    }
+
+    function _mint(address to, uint256 amount) internal {
+        require(to != address(0), "APZ: mint to zero");
+
+        totalSupply += amount;
+        _balances[to] += amount;
+
+        _updatePortfolioOnReceive(to, amount);
+
+        emit Mint(to, amount);
+        emit Transfer(address(0), to, amount);
+    }
+
+    function _burn(address from, uint256 amount) internal {
+        require(from != address(0), "APZ: burn from zero");
+        require(_balances[from] >= amount, "APZ: burn exceeds balance");
+
+        _balances[from] -= amount;
+        totalSupply -= amount;
+
+        // burn را به‌عنوان ارسال به آدرس صفر در پرتفوی لحاظ نمی‌کنیم
+        portfolios[from].balance = _balances[from];
+        portfolios[from].lastUpdated = block.timestamp;
+
+        emit Burn(from, amount);
+        emit Transfer(from, address(0), amount);
+    }
+
+    function _approve(address tokenOwner, address spender, uint256 amount) internal {
+        require(tokenOwner != address(0), "APZ: approve from zero");
+        require(spender != address(0), "APZ: approve to zero");
+
+        _allowances[tokenOwner][spender] = amount;
+        emit Approval(tokenOwner, spender, amount);
+    }
+
+    // -------------------------
+    // History & Portfolio internals
+    // -------------------------
+    function _recordTx(
+        address from,
+        address to,
+        uint256 amount,
+        string memory txType
+    ) internal {
+        uint256 txId = ++nextTxId;
+
+        historyById[txId] = TxRecord({
+            id: txId,
+            from: from,
+            to: to,
+            amount: amount,
+            timestamp: block.timestamp,
+            txType: txType
+        });
+
+        if (from != address(0)) {
+            userTxIds[from].push(txId);
+        }
+        if (to != address(0)) {
+            userTxIds[to].push(txId);
+        }
+
+        emit TxRecorded(txId, from, to, amount, block.timestamp, txType);
+    }
+
+    function _updatePortfolioOnReceive(address user, uint256 amount) internal {
+        Portfolio storage p = portfolios[user];
+        p.balance = _balances[user];
+        p.totalReceived += amount;
+        p.lastUpdated = block.timestamp;
+
+        emit PortfolioUpdated(user, p.balance, p.totalReceived, p.totalSent, p.lastUpdated);
+    }
+
+    function _updatePortfolioOnSend(address user, uint256 amount) internal {
+        Portfolio storage p = portfolios[user];
+        p.balance = _balances[user];
+        p.totalSent += amount;
+        p.lastUpdated = block.timestamp;
+
+        emit PortfolioUpdated(user, p.balance, p.totalReceived, p.totalSent, p.lastUpdated);
+    }
+}
