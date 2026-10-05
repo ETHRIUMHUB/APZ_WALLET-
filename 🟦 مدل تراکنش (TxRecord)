@@ -1,0 +1,10 @@
+package org.apz.wallet.model
+
+data class TxRecord(
+    val id: Int,
+    val from: String,
+    val to: String,
+    val amount: Double,
+    val timestamp: Long,
+    val txType: String
+)
