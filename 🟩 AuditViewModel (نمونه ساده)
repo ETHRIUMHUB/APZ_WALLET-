@@ -1,0 +1,12 @@
+class AuditViewModel : ViewModel() {
+    private val _audit = MutableStateFlow(
+        AuditReport(totalTx = 120, suspiciousTx = 2, lastChecked = System.currentTimeMillis())
+    )
+    val audit: StateFlow<AuditReport> = _audit
+}
+
+data class AuditReport(
+    val totalTx: Int,
+    val suspiciousTx: Int,
+    val lastChecked: Long
+)
