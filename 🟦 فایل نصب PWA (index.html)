@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>APZ Manager PWA</title>
+
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#4A90E2" />
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-512.png" />
+
+  <!-- Styles -->
+  <style>
+    body {
+      font-family: Vazirmatn, sans-serif;
+      background: #0b0e1a;
+      color: #fff;
+      text-align: center;
+      padding: 40px;
+    }
+    button {
+      background: #4A90E2;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>APZ Manager</h1>
+  <p>برای نصب روی موبایل، گزینه <strong>"Add to Home Screen"</strong> را انتخاب کنید.</p>
+  <button onclick="installPWA()">نصب اپلیکیشن</button>
+
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        alert("این مرورگر از نصب PWA پشتیبانی نمی‌کند.");
+      }
+    }
+  </script>
+</body>
+</html>
