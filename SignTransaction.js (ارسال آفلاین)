@@ -1,0 +1,35 @@
+function SignTransaction() {
+  async function saveOfflineTx(tx) {
+    if ("serviceWorker" in navigator && "SyncManager" in window) {
+      const reg = await navigator.serviceWorker.ready;
+      reg.active.postMessage({ type: "SAVE_TX", tx });
+      alert("Transaction saved offline. Will sync when online.");
+    } else {
+      alert("Background Sync not supported.");
+    }
+  }
+
+  async function sendTransaction(to, amount) {
+    const tx = { to, amount, timestamp: Date.now() };
+    if (!navigator.onLine) {
+      await saveOfflineTx(tx);
+    } else {
+      // ارسال مستقیم آنلاین
+      await fetch("https://rpc.apzchain.org", {
+        method: "POST",
+        body: JSON.stringify({
+          method: "sendTransaction",
+          params: [tx],
+          id: 1,
+        }),
+      });
+    }
+  }
+
+  // UI ساده برای تست
+  return (
+    <div>
+      <button onClick={() => sendTransaction("0xAAA", 100)}>Send 100 APZ</button>
+    </div>
+  );
+}
