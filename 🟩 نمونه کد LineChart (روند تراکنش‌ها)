@@ -1,0 +1,26 @@
+@Composable
+fun TransactionLineChart(history: List<TxRecord>) {
+    val entries = history.mapIndexed { index, tx ->
+        Entry(index.toFloat(), tx.amount.toFloat())
+    }
+
+    val dataSet = LineDataSet(entries, "Transactions").apply {
+        color = Color.BLUE
+        valueTextColor = Color.BLACK
+        lineWidth = 2f
+        circleRadius = 4f
+    }
+
+    val lineData = LineData(dataSet)
+
+    AndroidView(
+        modifier = Modifier.fillMaxWidth().height(250.dp),
+        factory = { context ->
+            LineChart(context).apply {
+                data = lineData
+                description.text = "Transaction Amounts"
+                animateX(1000)
+            }
+        }
+    )
+}
