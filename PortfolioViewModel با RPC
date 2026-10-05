@@ -1,0 +1,19 @@
+class PortfolioViewModel : ViewModel() {
+    private val _portfolio = MutableStateFlow(
+        Portfolio(0.0, 0.0, 0.0, System.currentTimeMillis())
+    )
+    val portfolio: StateFlow<Portfolio> = _portfolio
+
+    fun loadPortfolio(address: String) {
+        val balanceJson = RPCClient.call("getBalance", listOf(address))
+        val receivedJson = RPCClient.call("getTotalReceived", listOf(address))
+        val sentJson = RPCClient.call("getTotalSent", listOf(address))
+
+        _portfolio.value = Portfolio(
+            balance = balanceJson.toDouble(),
+            totalReceived = receivedJson.toDouble(),
+            totalSent = sentJson.toDouble(),
+            lastUpdated = System.currentTimeMillis()
+        )
+    }
+}
