@@ -1,0 +1,30 @@
+android/
+└── app/
+    ├── build.gradle
+    ├── proguard-rules.pro
+    ├── src/
+    │   ├── main/
+    │   │   ├── AndroidManifest.xml
+    │   │   ├── java/org/apz/wallet/
+    │   │   │   ├── MainActivity.kt
+    │   │   │   ├── SplashActivity.kt
+    │   │   │   ├── navigation/
+    │   │   │   │   └── AppNavigator.kt
+    │   │   │   ├── wallet/
+    │   │   │   │   ├── WalletManager.kt
+    │   │   │   │   ├── KeyStoreHelper.kt
+    │   │   │   │   └── RPCClient.kt
+    │   │   │   └── ui/
+    │   │   │       ├── theme/
+    │   │   │       │   ├── Color.kt
+    │   │   │       │   ├── Theme.kt
+    │   │   │       └── screens/
+    │   │   │           ├── HomeScreen.kt
+    │   │   │           ├── SendScreen.kt
+    │   │   │           └── ReceiveScreen.kt
+    │   │   └── res/
+    │   │       ├── layout/
+    │   │       ├── drawable/
+    │   │       ├── values/
+    │   │       └── mipmap/
+    └── gradle.properties
