@@ -1,0 +1,28 @@
+@Composable
+fun HistoryScreen(viewModel: HistoryViewModel) {
+    val history by viewModel.history.collectAsState()
+
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Transaction History", style = MaterialTheme.typography.headlineMedium)
+
+        LazyColumn {
+            items(history) { tx ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    elevation = CardDefaults.cardElevation(4.dp)
+                ) {
+                    Column(Modifier.padding(12.dp)) {
+                        Text("TxID: ${tx.id}")
+                        Text("From: ${tx.from}")
+                        Text("To: ${tx.to}")
+                        Text("Amount: ${tx.amount} APZ")
+                        Text("Type: ${tx.txType}")
+                        Text("Time: ${tx.timestamp}")
+                    }
+                }
+            }
+        }
+    }
+}
