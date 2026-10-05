@@ -1,0 +1,51 @@
+import React, { useState } from "react";
+import "./onboarding.css";
+
+function Onboarding({ onFinish }) {
+  const [step, setStep] = useState(0);
+
+  const screens = [
+    {
+      title: "خوش آمدید 💙",
+      text: "APZ Manager — داشبورد امن و شفاف برای مدیریت پرتفوی و تراکنش‌ها.",
+      img: "/images/apz-logo.png",
+      anim: "fade-in"
+    },
+    {
+      title: "ویژگی‌ها 🌌",
+      text: "نمایش Portfolio + History + Audit در یک داشبورد، با قابلیت Offline Mode.",
+      img: "/images/portfolio-chart.png",
+      anim: "slide-up"
+    },
+    {
+      title: "امنیت 🔐",
+      text: "ورود با Wallet/Metamask و امضای تراکنش‌ها با Push Notifications.",
+      img: "/images/security-lock.png",
+      anim: "bounce"
+    },
+    {
+      title: "شروع 🚀",
+      text: "همین حالا وارد داشبورد شوید و مدیریت APZ Chain را آغاز کنید.",
+      img: "/images/get-started.png",
+      anim: "pulse"
+    },
+  ];
+
+  const current = screens[step];
+
+  return (
+    <div className={`onboarding-screen ${current.anim}`}>
+      <img src={current.img} alt={current.title} className="onboarding-img" />
+      <h2>{current.title}</h2>
+      <p>{current.text}</p>
+
+      {step < screens.length - 1 ? (
+        <button onClick={() => setStep(step + 1)}>ادامه</button>
+      ) : (
+        <button onClick={onFinish}>شروع</button>
+      )}
+    </div>
+  );
+}
+
+export default Onboarding;
