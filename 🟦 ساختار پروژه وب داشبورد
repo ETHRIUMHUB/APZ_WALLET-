@@ -1,0 +1,14 @@
+apz-manager-dashboard/
+ ├── public/
+ │    └── index.html
+ ├── src/
+ │    ├── App.js
+ │    ├── components/
+ │    │    ├── PortfolioChart.js
+ │    │    ├── HistoryChart.js
+ │    │    ├── AuditReport.js
+ │    │    └── TransactionFilter.js
+ │    ├── services/
+ │    │    └── rpcClient.js
+ │    └── styles.css
+ └── package.json
