@@ -1,0 +1,7 @@
+@Composable
+fun BalanceChart(balance: Double) {
+    Box(Modifier.fillMaxWidth().height(200.dp)) {
+        Text("Balance: $balance APZ", style = MaterialTheme.typography.titleLarge)
+        // اینجا می‌تونی نمودار خطی یا دایره‌ای اضافه کنی
+    }
+}
