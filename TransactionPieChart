@@ -1,0 +1,12 @@
+@Composable
+fun TransactionPieChart(received: Double, sent: Double) {
+    val total = received + sent
+    val receivedPercent = (received / total) * 100
+    val sentPercent = (sent / total) * 100
+
+    Column {
+        Text("Received: $receivedPercent%")
+        Text("Sent: $sentPercent%")
+        // اینجا می‌تونی PieChart واقعی اضافه کنی
+    }
+}
