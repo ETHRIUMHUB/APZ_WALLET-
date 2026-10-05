@@ -1,0 +1,15 @@
+contracts/
+ ├── APZTokenAdvanced.sol   # توکن + پرتفوی + تاریخچه
+ ├── Audit.sol              # ماژول ممیزی
+ ├── Portfolio.sol          # ماژول پرتفوی جداگانه
+ └── History.sol            # ماژول تاریخچه جداگانه
+
+dashboard/APZ_Manager/
+ ├── index.html             # داشبورد وب
+ ├── charts.js              # نمودارها
+ └── auditReports.js        # گزارش‌های ممیزی
+
+mobile/APZ_Wallet/
+ ├── PortfolioScreen.kt     # صفحه پرتفوی
+ ├── HistoryScreen.kt       # صفحه تاریخچه
+ └── TokenScreen.kt         # صفحه مدیریت توکن
