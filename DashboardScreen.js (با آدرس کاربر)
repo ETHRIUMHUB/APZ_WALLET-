@@ -1,0 +1,38 @@
+import React, { useEffect, useState } from "react";
+import rpcClient from "../services/rpcClient";
+import PortfolioChart from "./PortfolioChart";
+import HistoryChart from "./HistoryChart";
+import AuditReport from "./AuditReport";
+
+function DashboardScreen({ address }) {
+  const [portfolio, setPortfolio] = useState({});
+  const [history, setHistory] = useState([]);
+  const [audit, setAudit] = useState({});
+
+  useEffect(() => {
+    async function loadData() {
+      const p = await rpcClient("getPortfolio", [address]);
+      const h = await rpcClient("getTransactionHistory", [address]);
+      const a = await rpcClient("getAuditReport", []);
+      setPortfolio(p);
+      setHistory(h);
+      setAudit(a);
+    }
+    loadData();
+  }, [address]);
+
+  return (
+    <div>
+      <h2>Portfolio</h2>
+      <PortfolioChart portfolio={portfolio} />
+
+      <h2>History</h2>
+      <HistoryChart history={history} />
+
+      <h2>Audit</h2>
+      <AuditReport audit={audit} />
+    </div>
+  );
+}
+
+export default DashboardScreen;
