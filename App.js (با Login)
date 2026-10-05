@@ -1,0 +1,20 @@
+import React, { useState } from "react";
+import WalletLogin from "./components/WalletLogin";
+import DashboardScreen from "./components/DashboardScreen";
+
+function App() {
+  const [account, setAccount] = useState(null);
+
+  return (
+    <div>
+      <h1>APZ Manager Dashboard</h1>
+      {!account ? (
+        <WalletLogin onLogin={setAccount} />
+      ) : (
+        <DashboardScreen address={account} />
+      )}
+    </div>
+  );
+}
+
+export default App;
