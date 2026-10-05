@@ -1,0 +1,24 @@
+@Composable
+fun TransactionBarChart(history: List<TxRecord>) {
+    val entries = history.mapIndexed { index, tx ->
+        BarEntry(index.toFloat(), tx.amount.toFloat())
+    }
+
+    val dataSet = BarDataSet(entries, "Transactions").apply {
+        color = Color.MAGENTA
+        valueTextColor = Color.BLACK
+    }
+
+    val barData = BarData(dataSet)
+
+    AndroidView(
+        modifier = Modifier.fillMaxWidth().height(250.dp),
+        factory = { context ->
+            BarChart(context).apply {
+                data = barData
+                description.text = "Transaction History"
+                animateY(1000)
+            }
+        }
+    )
+}
